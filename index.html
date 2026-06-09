@@ -6,7 +6,6 @@
     <title>GEO QUEST AR | 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
     <style>
         :root {
             --cyan: #00f2ff;
@@ -416,6 +415,7 @@
 </div>
 
 <script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js";
 import { HandLandmarker, FilesetResolver } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.3";
 
 // ── DOM ──
@@ -502,7 +502,7 @@ function setupScene() {
 
     // Голограма
     holoVideo = document.createElement('video');
-    holoVideo.src = 'assets/video/guide_hologra.mp4';
+    holoVideo.src = 'assets/video/guide_hologram.mp4';
     holoVideo.muted = true;
     holoVideo.loop = true;
     holoVideo.playsInline = true;
