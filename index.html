@@ -282,15 +282,45 @@
             font-size: 1rem; color: rgba(0,200,220,0.8);
             margin-bottom: 28px; text-align: center; line-height: 1.5;
         }
-        #btn-replay {
-            background: transparent; color: var(--cyan);
-            padding: 14px 40px; border-radius: 12px;
-            font-weight: 700; font-family: 'Orbitron', monospace;
-            border: 1.5px solid var(--cyan); cursor: pointer;
-            font-size: 0.9rem; letter-spacing: 2px;
-            transition: all 0.3s;
+        
+        /* Кнопка переходу до наступної кімнати */
+        #btn-next-room {
+            display: inline-block;
+            text-decoration: none;
+            background: var(--cyan);
+            color: #000;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        #btn-replay:hover { background: rgba(0,242,255,0.1); }
+        #btn-next-room:hover {
+            box-shadow: 0 0 35px rgba(0, 242, 255, 0.7);
+            transform: scale(1.03);
+        }
+        #btn-next-room:active {
+            transform: scale(0.96);
+        }
+
+        #btn-replay {
+            background: transparent; color: rgba(0,242,255,0.6);
+            padding: 12px 40px; border-radius: 12px;
+            font-weight: 700; font-family: 'Orbitron', monospace;
+            border: 1.5px solid rgba(0,242,255,0.3); cursor: pointer;
+            font-size: 0.85rem; letter-spacing: 2px;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 320px;
+        }
+        #btn-replay:hover { background: rgba(0,242,255,0.1); color: var(--cyan); border-color: var(--cyan); }
 
         /* Частинки перемоги */
         #particles-canvas {
@@ -343,13 +373,11 @@
 <div id="score-badge">★ <span id="score-val">0</span> / <span id="total-val">5</span></div>
 <div id="no-hand-msg">НАВЕДИ РУКУ НА КАМЕРУ</div>
 
-<!-- Екран завантаження AI -->
 <div id="loading-overlay">
     <div class="loader-ring"></div>
     <div id="loading-text">ЗАВАНТАЖЕННЯ AI...</div>
 </div>
 
-<!-- Старт екран -->
 <div id="start-screen">
     <div class="logo-wrap">
         <div class="logo-main">GEO AR</div>
@@ -364,7 +392,6 @@
     </div>
 </div>
 
-<!-- Помилка камери -->
 <div id="cam-error">
     <div class="cam-error-icon">📷</div>
     <div class="cam-error-title">Камера недоступна</div>
@@ -372,10 +399,8 @@
     <button id="btn-retry">Спробувати знову</button>
 </div>
 
-<!-- Частинки -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- Фінальний екран -->
 <div id="finish-screen">
     <div class="finish-stars" id="finish-stars">⭐⭐⭐</div>
     <div class="finish-title" id="finish-title">МІСІЯ ВИКОНАНА!</div>
@@ -391,6 +416,9 @@
         </div>
     </div>
     <div class="finish-rank" id="finish-rank"></div>
+    
+    <a href="https://lessa2332.github.io/7room/" id="btn-next-room">ПРОДОВЖИТИ КВЕСТ 🚀</a>
+    
     <button id="btn-replay">↺ ГРАТИ ЗНОВУ</button>
 </div>
 
@@ -571,7 +599,6 @@ async function initAI() {
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
         );
 
-        // GPU з fallback на CPU
         let delegate = "GPU";
         try {
             handLandmarker = await HandLandmarker.createFromOptions(vision, {
@@ -600,7 +627,6 @@ async function initAI() {
         statusDiv.innerText = `СИСТЕМА ГОТОВА · ${delegate}`;
         scoreBadge.style.display = 'block';
 
-        // Дати секунду, потім увімкнути жест
         setTimeout(() => {
             isWaitingForGesture = true;
             gestureHint.style.display = 'flex';
@@ -738,8 +764,6 @@ function startRecording() {
     currentRec.lang = 'uk-UA';
     currentRec.interimResults = false;
     currentRec.maxAlternatives = 3;
-
-    currentRec.onstart = () => {};
 
     currentRec.onresult = (e) => {
         isRecording = false;
@@ -904,12 +928,11 @@ function animate(time) {
             masterGroup.visible = true;
             noHandMsg.style.opacity = '0';
 
-            // Детекція кулака: 4 пальці + великий
             const isFist =
-                hand[8].y  > hand[6].y  &&  // вказівний
-                hand[12].y > hand[10].y &&  // середній
-                hand[16].y > hand[14].y &&  // безіменний
-                hand[20].y > hand[18].y;    // мізинець
+                hand[8].y  > hand[6].y  &&  
+                hand[12].y > hand[10].y &&  
+                hand[16].y > hand[14].y &&  
+                hand[20].y > hand[18].y;    
 
             if (isWaitingForGesture && isFist && !gestureDebounce) {
                 triggerQuestion();
@@ -932,18 +955,9 @@ document.getElementById('btn-start').addEventListener('click', async () => {
     btn.disabled = true;
     userName = document.getElementById('user-name').value.trim() || "Explorer";
 
-    // Сховати старт екран
     const startScreen = document.getElementById('start-screen');
     startScreen.style.opacity = '0';
     setTimeout(() => startScreen.style.display = 'none', 500);
-
-    // Попередньо завантажувати AI ще під час запиту камери
-    const aiPromise = (async () => {
-        const vision = await FilesetResolver.forVisionTasks(
-            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-        );
-        return vision;
-    })();
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -975,7 +989,6 @@ document.getElementById('btn-start').addEventListener('click', async () => {
 
 document.getElementById('btn-retry').addEventListener('click', () => location.reload());
 
-// ── VISIBILITY API: зупиняти розпізнавання якщо вкладка прихована ──
 document.addEventListener('visibilitychange', () => {
     if (document.hidden && currentRec && isRecording) {
         try { currentRec.stop(); } catch(e) {}
@@ -985,15 +998,13 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-// ── Preload AI у фоні під час показу старт-екрану ──
-// (дозволяє швидший старт після кліку)
 let visionPreload = null;
 setTimeout(async () => {
     try {
         visionPreload = await FilesetResolver.forVisionTasks(
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
         );
-    } catch(e) { /* silent fail */ }
+    } catch(e) { }
 }, 500);
 
 </script>
