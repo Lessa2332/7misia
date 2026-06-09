@@ -538,6 +538,10 @@ function setupScene() {
     holoVideo.setAttribute('webkit-playsinline', '');
 
     const videoTex = new THREE.VideoTexture(holoVideo);
+    // Налаштування фільтрації для чіткості на мобільних
+    videoTex.minFilter = THREE.LinearFilter;
+    videoTex.magFilter = THREE.LinearFilter;
+
     const holoMat = new THREE.ShaderMaterial({
         uniforms: {
             uVideo: { value: videoTex },
@@ -555,14 +559,29 @@ function setupScene() {
             varying vec2 vUv;
             void main() {
                 vec4 color = texture2D(uVideo, vUv);
-                if (color.g > (color.r + color.b) * 0.5 + 0.1) discard;
-                float scanline = sin(vUv.y * 200.0 + uTime * 5.0) * 0.08;
-                vec3 finalColor = color.rgb + vec3(0.0, 0.15, 0.25) * scanline + vec3(0.0, 0.08, 0.15);
-                gl_FragColor = vec4(finalColor, 0.9);
+                
+                // Базовий колір хромакею (чистий зелений)
+                vec3 chromaKeyColor = vec3(0.0, 1.0, 0.0);
+                
+                // Обчислюємо різницю між кольором пікселя та зеленим фоном
+                float dist = distance(color.rgb, chromaKeyColor);
+                
+                // Поріг чутливості (якщо близько до зеленого — видаляємо)
+                // 0.45 — оптимально для більшості мобільних відео. Можна міняти від 0.4 до 0.55
+                if (dist < 0.45) {
+                    discard;
+                }
+                
+                // Ефект сканування (голограми)
+                float scanline = sin(vUv.y * 180.0 + uTime * 6.0) * 0.12;
+                
+                // Додаємо голографічний блакитний відтінок до невідкинутих пікселів
+                vec3 holoColor = color.rgb + vec3(0.0, 0.18, 0.3) * scanline + vec3(0.0, 0.1, 0.2);
+                
+                gl_FragColor = vec4(holoColor, 0.9);
             }`,
         transparent: true
     });
-
     holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 1.4), holoMat);
     holoPlane.position.set(0, 0.8, 0);
     holoPlane.visible = false;
