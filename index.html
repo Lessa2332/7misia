@@ -282,45 +282,15 @@
             font-size: 1rem; color: rgba(0,200,220,0.8);
             margin-bottom: 28px; text-align: center; line-height: 1.5;
         }
-        
-        /* Кнопка переходу до наступної кімнати */
-        #btn-next-room {
-            display: inline-block;
-            text-decoration: none;
-            background: var(--cyan);
-            color: #000;
-            padding: 16px 40px;
-            border-radius: 12px;
-            font-weight: 900;
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-            text-align: center;
-            width: 100%;
-            max-width: 320px;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        #btn-next-room:hover {
-            box-shadow: 0 0 35px rgba(0, 242, 255, 0.7);
-            transform: scale(1.03);
-        }
-        #btn-next-room:active {
-            transform: scale(0.96);
-        }
-
         #btn-replay {
-            background: transparent; color: rgba(0,242,255,0.6);
-            padding: 12px 40px; border-radius: 12px;
+            background: transparent; color: var(--cyan);
+            padding: 14px 40px; border-radius: 12px;
             font-weight: 700; font-family: 'Orbitron', monospace;
-            border: 1.5px solid rgba(0,242,255,0.3); cursor: pointer;
-            font-size: 0.85rem; letter-spacing: 2px;
+            border: 1.5px solid var(--cyan); cursor: pointer;
+            font-size: 0.9rem; letter-spacing: 2px;
             transition: all 0.3s;
-            width: 100%;
-            max-width: 320px;
         }
-        #btn-replay:hover { background: rgba(0,242,255,0.1); color: var(--cyan); border-color: var(--cyan); }
+        #btn-replay:hover { background: rgba(0,242,255,0.1); }
 
         /* Частинки перемоги */
         #particles-canvas {
@@ -416,9 +386,6 @@
         </div>
     </div>
     <div class="finish-rank" id="finish-rank"></div>
-    
-    <a href="https://lessa2332.github.io/7room/" id="btn-next-room">ПРОДОВЖИТИ КВЕСТ 🚀</a>
-    
     <button id="btn-replay">↺ ГРАТИ ЗНОВУ</button>
 </div>
 
@@ -462,27 +429,27 @@ const speechFallback = document.getElementById('speech-fallback');
 
 // ── СТАН ──
 let handLandmarker = null;
-let scene, camera, renderer, ring, masterGroup, holoPlane, holoVideo;
+let scene, camera, renderer, ring, masterGroup, holoPlane, holoVideo, holoMat;
 let userName = "Explorer";
 let score = 0, currentIdx = 0;
 let isWaitingForGesture = false;
 let isSpeaking = false;
 let isRecording = false;
-let gestureDebounce = false; // блокує повторний тригер
+let gestureDebounce = false; 
 let currentRec = null;
 let hasSpeechAPI = false;
 let animFrameId = null;
+const clock = new THREE.Clock(); // Створюємо вбудований годинник Three.js
 
 const questions = [
     { q: "Яка найбільша оболонка Землі, що об'єднує всі інші сфери?", a: ["географічна"] },
     { q: "Як називається повітряна оболонка планети?",                 a: ["атмосфера"] },
-    { q: "Яка сфера Землі складається з усіх її вод?",                 a: ["гідросфера"] },
-    { q: "Тверда оболонка Землі — це...",                              a: ["літосфера", "літо"] },
+    { q: "Яка сфера Землі складається з усіх її вод?",                  a: ["гідросфера"] },
+    { q: "Тверда оболонка Землі — це...",                               a: ["літосфера", "літо"] },
     { q: "Сфера, де панує життя, називається...",                      a: ["біосфера"] }
 ];
 totalVal.textContent = questions.length;
 
-// ── ПЕРЕВІРКА SPEECH API ──
 hasSpeechAPI = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 
 // ── СИНТЕЗ МОВЛЕННЯ ──
@@ -496,10 +463,8 @@ function speak(text, onEnd = () => {}) {
     u.onend  = () => { isSpeaking = false; onEnd(); };
     u.onerror = () => { isSpeaking = false; onEnd(); };
 
-    // iOS Safari: потрібна затримка після cancel()
     setTimeout(() => {
         window.speechSynthesis.speak(u);
-        // iOS workaround: якщо TTS не запускається — показуємо текст
         setTimeout(() => {
             if (isSpeaking && window.speechSynthesis.pending === false &&
                 window.speechSynthesis.speaking === false) {
@@ -538,11 +503,11 @@ function setupScene() {
     holoVideo.setAttribute('webkit-playsinline', '');
 
     const videoTex = new THREE.VideoTexture(holoVideo);
-    // Налаштування фільтрації для чіткості на мобільних
     videoTex.minFilter = THREE.LinearFilter;
     videoTex.magFilter = THREE.LinearFilter;
 
-    const holoMat = new THREE.ShaderMaterial({
+    // Оновлений фрагментний шейдер з колірною відстанню
+    holoMat = new THREE.ShaderMaterial({
         uniforms: {
             uVideo: { value: videoTex },
             uTime:  { value: 0 }
@@ -560,28 +525,20 @@ function setupScene() {
             void main() {
                 vec4 color = texture2D(uVideo, vUv);
                 
-                // Базовий колір хромакею (чистий зелений)
+                // Надійне відсікання хромакею за радіусом близькості кольору
                 vec3 chromaKeyColor = vec3(0.0, 1.0, 0.0);
-                
-                // Обчислюємо різницю між кольором пікселя та зеленим фоном
                 float dist = distance(color.rgb, chromaKeyColor);
+                if (dist < 0.45) discard;
                 
-                // Поріг чутливості (якщо близько до зеленого — видаляємо)
-                // 0.45 — оптимально для більшості мобільних відео. Можна міняти від 0.4 до 0.55
-                if (dist < 0.45) {
-                    discard;
-                }
-                
-                // Ефект сканування (голограми)
+                // Хвильовий ефект сканування голограми
                 float scanline = sin(vUv.y * 180.0 + uTime * 6.0) * 0.12;
+                vec3 finalColor = color.rgb + vec3(0.0, 0.18, 0.3) * scanline + vec3(0.0, 0.1, 0.2);
                 
-                // Додаємо голографічний блакитний відтінок до невідкинутих пікселів
-                vec3 holoColor = color.rgb + vec3(0.0, 0.18, 0.3) * scanline + vec3(0.0, 0.1, 0.2);
-                
-                gl_FragColor = vec4(holoColor, 0.9);
+                gl_FragColor = vec4(finalColor, 0.9);
             }`,
         transparent: true
     });
+
     holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 1.4), holoMat);
     holoPlane.position.set(0, 0.8, 0);
     holoPlane.visible = false;
@@ -590,7 +547,6 @@ function setupScene() {
     scene.add(new THREE.AmbientLight(0xffffff, 1));
     camera.position.z = 3.5;
 
-    // ── RESIZE HANDLER ──
     function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
@@ -598,6 +554,57 @@ function setupScene() {
     }
     window.addEventListener('resize', onResize);
     screen.orientation?.addEventListener('change', () => setTimeout(onResize, 200));
+
+    // Запускаємо цикл рендерингу
+    tick();
+}
+
+// ── ЦИКЛ АНІМАЦІЇ (ДОДАНО ОНОВЛЕННЯ ШЕЙДЕРА) ──
+function tick() {
+    animFrameId = requestAnimationFrame(tick);
+    
+    const elapsedTime = clock.getElapsedTime();
+    
+    // Передаємо час у шейдер, щоб працювала анімація ліній
+    if (holoMat) {
+        holoMat.uniforms.uTime.value = elapsedTime;
+    }
+
+    // Легке обертання кільця для динаміки
+    if (ring) {
+        ring.rotation.z = elapsedTime * 0.5;
+    }
+
+    // Обробка камери/MediaPipe та рендер сцени
+    if (video.readyState >= 2 && handLandmarker) {
+        const timestamp = performance.now();
+        const results = handLandmarker.detectForVideo(video, timestamp);
+        
+        if (results.landmarks && results.landmarks.length > 0) {
+            noHandMsg.style.opacity = '0';
+            const points = results.landmarks[0];
+            
+            // Проста інверсія для координат Three.js (зважаючи на віддзеркалення відео)
+            const x = (0.5 - points[9].x) * 2.5; 
+            const y = (0.5 - points[9].y) * 2.0;
+            masterGroup.position.set(x, y, 0);
+
+            // Перевірка кулака
+            if (isWaitingForGesture && !gestureDebounce) {
+                const isFist = points[8].y > points[6].y && 
+                               points[12].y > points[10].y && 
+                               points[16].y > points[14].y && 
+                               points[20].y > points[18].y;
+                if (isFist) {
+                    triggerQuestion();
+                }
+            }
+        } else {
+            noHandMsg.style.opacity = '1';
+        }
+    }
+
+    renderer.render(scene, camera);
 }
 
 // ── ІНІЦІАЛІЗАЦІЯ MEDIAPIPE ──
@@ -715,7 +722,6 @@ function showSpeechFallback() {
         </button>`;
 }
 
-// ── ПІСЛЯ ВІДПОВІДІ ──
 window.advanceQuestion = function(isCorrect) {
     speechFallback.style.display = 'none';
     speechFallback.innerHTML = '';
@@ -871,161 +877,47 @@ function finishQuest() {
     document.getElementById('finish-total').textContent = total;
     document.getElementById('finish-rank').textContent = rankText;
 
-    speak(`${userName}, ти набрав ${score} з ${total}! ${rankText}`, () => {});
-
-    if (pct >= 0.6) launchParticles();
-
+    speak(`${userName}, ти набрав ${score} з ${total}! ${rankText}`);
     document.getElementById('finish-screen').classList.add('visible');
 }
 
-// ── ЧАСТИНКИ ──
-function launchParticles() {
-    const pc = document.getElementById('particles-canvas');
-    pc.classList.add('visible');
-    pc.width = window.innerWidth;
-    pc.height = window.innerHeight;
-    const ctx = pc.getContext('2d');
-    const particles = [];
-    const colors = ['#00f2ff','#00ff88','#ffaa00','#ff3366','#ffffff'];
+// ── СТАРТ ГРИ ТА КАМЕРА ──
+document.getElementById('btn-start').addEventListener('click', () => {
+    const input = document.getElementById('user-name');
+    if (input.value.trim()) userName = input.value.trim();
+    
+    document.getElementById('start-screen').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('start-screen').style.display = 'none';
+        startCamera();
+    }, 500);
+});
 
-    for (let i = 0; i < 80; i++) {
-        particles.push({
-            x: Math.random() * pc.width,
-            y: pc.height + 10,
-            vx: (Math.random() - 0.5) * 4,
-            vy: -(Math.random() * 6 + 3),
-            r: Math.random() * 5 + 2,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            alpha: 1,
-            gravity: 0.1
-        });
-    }
-
-    let frames = 0;
-    function animParticles() {
-        ctx.clearRect(0, 0, pc.width, pc.height);
-        particles.forEach(p => {
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += p.gravity;
-            p.alpha -= 0.012;
-            ctx.globalAlpha = Math.max(0, p.alpha);
-            ctx.fillStyle = p.color;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fill();
-        });
-        frames++;
-        if (frames < 120) requestAnimationFrame(animParticles);
-        else { pc.classList.remove('visible'); ctx.clearRect(0, 0, pc.width, pc.height); }
-    }
-    animParticles();
-}
-
-// ── REPLAY ──
-document.getElementById('btn-replay').addEventListener('click', () => location.reload());
-
-// ── ANIMATE LOOP ──
-function animate(time) {
-    animFrameId = requestAnimationFrame(animate);
-
-    if (holoPlane?.material?.uniforms) {
-        holoPlane.material.uniforms.uTime.value = (time || 0) / 1000;
-    }
-
-    if (handLandmarker && video.readyState >= 2 && !document.hidden) {
-        let res;
-        try { res = handLandmarker.detectForVideo(video, performance.now()); }
-        catch(e) { res = null; }
-
-        if (res?.landmarks?.[0]) {
-            const hand = res.landmarks[0];
-            const wrist = hand[0];
-
-            masterGroup.position.x += ((0.5 - wrist.x) * 4 - masterGroup.position.x) * 0.15;
-            masterGroup.position.y += ((0.5 - wrist.y) * 3 - masterGroup.position.y) * 0.15;
-            masterGroup.visible = true;
-            noHandMsg.style.opacity = '0';
-
-            const isFist =
-                hand[8].y  > hand[6].y  &&  
-                hand[12].y > hand[10].y &&  
-                hand[16].y > hand[14].y &&  
-                hand[20].y > hand[18].y;    
-
-            if (isWaitingForGesture && isFist && !gestureDebounce) {
-                triggerQuestion();
-            }
-        } else {
-            masterGroup.visible = false;
-            if (isWaitingForGesture) {
-                noHandMsg.style.opacity = '1';
-            }
-        }
-    }
-
-    if (ring) ring.rotation.z += 0.025;
-    renderer.render(scene, camera);
-}
-
-// ── СТАРТ ──
-document.getElementById('btn-start').addEventListener('click', async () => {
-    const btn = document.getElementById('btn-start');
-    btn.disabled = true;
-    userName = document.getElementById('user-name').value.trim() || "Explorer";
-
-    const startScreen = document.getElementById('start-screen');
-    startScreen.style.opacity = '0';
-    setTimeout(() => startScreen.style.display = 'none', 500);
-
+async function startCamera() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } },
+            video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
             audio: false
         });
         video.srcObject = stream;
-        await new Promise(r => video.addEventListener('loadedmetadata', r, { once: true }));
-
-        setupScene();
-        animate();
-        await initAI();
-
+        video.onloadedmetadata = () => {
+            setupScene();
+            initAI();
+        };
     } catch (err) {
         console.error("Camera error:", err);
-        const camError = document.getElementById('cam-error');
-        const camErrorBody = document.getElementById('cam-error-body');
-        camError.classList.add('visible');
-
-        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-            camErrorBody.textContent = 'Доступ до камери заборонено. Відкрий налаштування браузера → дозволи сайту → увімкни камеру та перезавантаж сторінку.';
-        } else if (err.name === 'NotFoundError') {
-            camErrorBody.textContent = 'Камера не знайдена. Перевір підключення або спробуй інший пристрій.';
-        } else {
-            camErrorBody.textContent = `Помилка камери: ${err.message}. Спробуй перезавантажити сторінку.`;
-        }
+        document.getElementById('cam-error').classList.add('visible');
     }
+}
+
+document.getElementById('btn-retry').addEventListener('click', () => {
+    document.getElementById('cam-error').classList.remove('visible');
+    startCamera();
 });
 
-document.getElementById('btn-retry').addEventListener('click', () => location.reload());
-
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden && currentRec && isRecording) {
-        try { currentRec.stop(); } catch(e) {}
-        isRecording = false;
-        micBtn.classList.remove('listening');
-        waveBars.style.display = 'none';
-    }
+document.getElementById('btn-replay').addEventListener('click', () => {
+    location.reload();
 });
-
-let visionPreload = null;
-setTimeout(async () => {
-    try {
-        visionPreload = await FilesetResolver.forVisionTasks(
-            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
-        );
-    } catch(e) { }
-}, 500);
-
 </script>
 </body>
 </html>
