@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta name="google-site-verification" content="maXYi-2hu6hHcC5k04AFVTYZ7NKc8i8y5EYyzYHIrrA" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#e8d8c0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Суперзошит">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Суперзошит">
+
+    <!-- ── SEO ── -->
+    <meta name="description" content="Суперзошит — безкоштовний інтерактивний шкільний зошит онлайн. Лінійка, клітинка, коса лінія, малювання від руки, AI-помічник, генератор тестів, перевірка орфографії, стікери, таблиці, QR-коди та спільне редагування в режимі реального часу для вчителів та учнів.">
+    <meta name="keywords" content="суперзошит, онлайн зошит, шкільний зошит, інтерактивний зошит, зошит для учнів, зошит вчителя, AI зошит, малювання онлайн, спільне редагування, зошит у клітинку, зошит в лінійку">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Ігор Шуляк">
+    <link rel="canonical" href="https://codenamexxv.github.io/date/">
+
+    <!-- ── Open Graph (Google / соцмережі) ── -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://codenamexxv.github.io/date/">
+    <meta property="og:title" content="Суперзошит — інтерактивний шкільний зошит онлайн">
+    <meta property="og:description" content="Безкоштовний онлайн-зошит для школярів і вчителів: лінійка, клітинка, малювання від руки, AI-помічник, генератор тестів, спільне редагування в реальному часі. Працює на телефоні та комп'ютері.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/logo.png">
+    <meta property="og:site_name" content="Суперзошит">
+    <meta property="og:locale" content="uk_UA">
+
+    <!-- ── Twitter Card ── -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Суперзошит — інтерактивний шкільний зошит онлайн">
+    <meta name="twitter:description" content="Безкоштовний онлайн-зошит для школярів і вчителів з AI-помічником, малюванням та спільним редагуванням.">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/logo.png">
+
+    <title>Суперзошит — інтерактивний шкільний зошит онлайн</title>
+    <link rel="icon" type="image/png"
+        href="https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/logo.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/logo.png">
+    <link rel="manifest" id="pwaManifestLink">
+
+    <!-- ── JSON-LD структуровані дані (найсильніший сигнал для Google) ── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Суперзошит",
+      "alternateName": "SuperNotebook",
+      "url": "https://codenamexxv.github.io/date/",
+      "description": "Безкоштовний інтерактивний шкільний зошит онлайн для учнів та вчителів. Підтримує малювання від руки, лінійку та клітинку, AI-помічника, генератор тестів, перевірку орфографії, стікери, таблиці, QR-коди та спільне редагування в реальному часі.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web, Android, iOS, Windows, macOS",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "UAH"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Ігор Шуляк",
+        "url": "https://codenamexxv.github.io/teacher/"
+      },
+      "inLanguage": ["uk", "en", "de"],
+      "featureList": [
+        "Малювання від руки",
+        "Лінійка, клітинка, коса лінія",
+        "AI-помічник та генератор тестів",
+        "Перевірка орфографії",
+        "Спільне редагування в реальному часі",
+        "Стікери та таблиці",
+        "QR-генератор",
+        "Голосове введення",
+        "Збереження як PNG",
+        "Офлайн-режим (PWA)"
+      ],
+      "screenshot": "https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/logo.png",
+      "image": "https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/logo.png",
+      "isAccessibleForFree": true,
+      "keywords": "онлайн зошит, шкільний зошит, інтерактивний зошит, AI зошит, зошит для учнів"
+    }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Tesseract replaced by Groq Vision API -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body id="mainBody">
+
+    <div class="brand-header">
+        <img
+            class="brand-header__logo"
+            src="https://raw.githubusercontent.com/CodenameXXV/date/refs/heads/main/headlogo.png"
+            alt="Суперзошит логотип"
+            draggable="false"
+        >
+        <span class="brand-header__title">Суперзошит!</span>
+    </div>
+
+    <div class="container">
+        <div class="controls-panel">
+            <input type="date" id="dateSelect" style="display:none">
+            <input type="file" id="notebookFileInput" accept=".notebook,.json" style="display:none"
+                onchange="loadNotebookBackup(event)">
+
+            <!-- Файл -->
+            <div class="ctrl-group">
+                <span class="ctrl-group-label">Файл</span>
+                <div class="segmented-control">
+                    <button class="segmented-btn" onclick="saveNotebookBackup()" title="Зберегти файл зошита">
+                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="2" />
+                            <rect x="7" y="2" width="10" height="8" rx="1" />
+                            <rect x="8" y="14" width="8" height="6" rx="1" />
+                            <line x1="10" y1="2" x2="10" y2="7" />
+                        </svg>
+                    </button>
+                    <button class="segmented-btn" onclick="document.getElementById('notebookFileInput').click()" title="Відкрити файл зошита">
+                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="ctrl-sep"></div>
+
+            <!-- Мова -->
+            <div class="ctrl-group">
+                <span class="ctrl-group-label">Мова</span>
+                <div class="segmented-control" id="langToggle">
+                    <button class="segmented-btn" data-val="ua">UA</button>
+                    <button class="segmented-btn" data-val="en">EN</button>
+                    <button class="segmented-btn" data-val="de">DE</button>
+                </div>
+            </div>
+
+            <div class="ctrl-sep"></div>
+
+            <!-- Тип роботи -->
+            <div class="ctrl-group">
+                <span class="ctrl-group-label">Тип роботи</span>
+                <div class="segmented-control" id="typeToggle">
+                    <button class="segmented-btn" data-val="home">Домашня</button>
+                    <button class="segmented-btn" data-val="class">Класна</button>
+                    <button class="segmented-btn" data-val="clean">Чисто</button>
+                </div>
+            </div>
+
+            <div class="ctrl-sep"></div>
+
+            <!-- Шрифт -->
+            <div class="ctrl-group">
+                <span class="ctrl-group-label">Шрифт</span>
+                <div class="segmented-control" id="fontToggle">
+                    <button class="segmented-btn" data-val="font-print">Друк</button>
+                    <button class="segmented-btn" data-val="font-hand">Пропис</button>
+                </div>
+            </div>
+
+            <div class="ctrl-sep"></div>
+
+            <!-- Фон -->
+            <div class="ctrl-group">
+                <span class="ctrl-group-label">Фон зошиту</span>
+                <div class="segmented-control" id="bgToggle">
+                    <button class="segmented-btn" data-val="bg-lines">Лінійка</button>
+                    <button class="segmented-btn" data-val="bg-grid">Клітинка</button>
+                    <button class="segmented-btn" data-val="bg-diagonal">Коса</button>
+                    <button class="segmented-btn" data-val="bg-clean">Чистий</button>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="card bg-lines font-print" id="notebookCard" onclick="handleCardClick(event)">
+            <canvas id="drawingCanvas"></canvas>
+            <div class="card-content">
+                <div class="date-header">
+                    <div class="date-header-row">
+                        <p class="card-text" id="displayDate" contenteditable="false" spellcheck="false"></p>
+                    </div>
+                    <p class="card-text" id="displayType" contenteditable="false" spellcheck="false"></p>
+                </div>
+                <div class="board-editor" id="boardEditor" contenteditable="false" spellcheck="false"></div>
+            </div>
+        </div>
+
+        <footer class="author-footer">
+            Автор <a href="https://codenamexxv.github.io/teacher/" target="_blank">Ігор Шуляк</a>
+        </footer>
+    </div>
+
+    <!-- PWA Desktop Install Button -->
+    <div id="pwaDesktopBtn" role="button" tabindex="0" aria-label="Встановити додаток">
+        <span class="pwa-desk-icon" onclick="window._pwaDesktopInstall()">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.3"
+                 fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        </span>
+        <span class="pwa-desk-text" onclick="window._pwaDesktopInstall()">
+            <span class="pwa-desk-label" id="pwaDesktopBtnLabel">Встановити</span>
+            <span class="pwa-desk-sub" id="pwaDesktopBtnSub">додати на робочий стіл</span>
+        </span>
+        <span class="pwa-desk-close" id="pwaDesktopBtnClose" onclick="window._pwaDesktopDismiss()" role="button" tabindex="0" aria-label="Закрити">✕</span>
+    </div>
+    <div id="pwaDesktopTooltip"></div>
+
+    <div class="board-toolbar" id="boardToolbar">
+        <button class="tool-btn" onmousedown="event.preventDefault(); undoAction()"
+            ontouchstart="event.preventDefault(); undoAction()" title="Відмінити">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 14 4 9 9 4"></polyline>
+                <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+            </svg>
+        </button>
+        <button class="tool-btn" onmousedown="event.preventDefault(); redoAction()"
+            ontouchstart="event.preventDefault(); redoAction()" title="Повторити">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 14 20 9 15 4"></polyline>
+                <path d="M4 20v-7a4 4 0 0 1 4-4h12"></path>
+            </svg>
+        </button>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="color-circle active" style="background: #497bb8;" data-color="#497bb8"
+            onmousedown="event.preventDefault(); updateColor('#497bb8', this)"
+            ontouchstart="event.preventDefault(); updateColor('#497bb8', this)"></div>
+        <div class="color-circle" style="background: #111827;" data-color="#111827"
+            onmousedown="event.preventDefault(); updateColor('#111827', this)"
+            ontouchstart="event.preventDefault(); updateColor('#111827', this)"></div>
+        <div class="color-circle" style="background: #dc2626;" data-color="#dc2626"
+            onmousedown="event.preventDefault(); updateColor('#dc2626', this)"
+            ontouchstart="event.preventDefault(); updateColor('#dc2626', this)"></div>
+        <div class="color-circle" style="background: #16a34a;" data-color="#16a34a"
+            onmousedown="event.preventDefault(); updateColor('#16a34a', this)"
+            ontouchstart="event.preventDefault(); updateColor('#16a34a', this)"></div>
+
+        <div class="toolbar-divider"></div>
+
+        <button class="tool-btn" id="fmtBold" onmousedown="event.preventDefault(); formatText('bold')"
+            ontouchstart="event.preventDefault(); formatText('bold')" title="Жирний"><b>B</b></button>
+        <button class="tool-btn" id="fmtUnderline" onmousedown="event.preventDefault(); formatText('underline')"
+            ontouchstart="event.preventDefault(); formatText('underline')" title="Підкреслений"><u>U</u></button>
+        <button class="tool-btn" id="fmtStrike" onmousedown="event.preventDefault(); formatText('strikethrough')"
+            ontouchstart="event.preventDefault(); formatText('strikethrough')" title="Зачеркнутий"><s>S</s></button>
+        <button class="tool-btn" id="fmtSup" onmousedown="event.preventDefault(); formatText('superscript')"
+            ontouchstart="event.preventDefault(); formatText('superscript')" title="Надрядковий"><span
+                style="font-size:11px;font-weight:700;line-height:1">x<sup style="font-size:7px">²</sup></span></button>
+        <button class="tool-btn" id="fmtSub" onmousedown="event.preventDefault(); formatText('subscript')"
+            ontouchstart="event.preventDefault(); formatText('subscript')" title="Підрядковий"><span
+                style="font-size:11px;font-weight:700;line-height:1">x<sub style="font-size:7px">₂</sub></span></button>
+
+        <button class="tool-btn" id="fmtLeft" onmousedown="event.preventDefault(); formatText('justifyLeft')"
+            ontouchstart="event.preventDefault(); formatText('justifyLeft')" title="По лівому краю">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="15" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <button class="tool-btn" id="fmtCenter" onmousedown="event.preventDefault(); formatText('justifyCenter')"
+            ontouchstart="event.preventDefault(); formatText('justifyCenter')" title="По центру">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="6" y1="12" x2="18" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <button class="tool-btn" id="fmtRight" onmousedown="event.preventDefault(); formatText('justifyRight')"
+            ontouchstart="event.preventDefault(); formatText('justifyRight')" title="По правому краю">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="9" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="toolbar-divider" id="dividerDrawing"></div>
+
+        <button class="tool-btn" id="pencilTool" onclick="setDrawMode('pencil')" title="Малювати">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+        </button>
+        <button class="tool-btn" id="eraserTool" onclick="setDrawMode('eraser')" title="Стирачка">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M20 20H7L3 16C2.5 15.5 2.5 14.5 3 14L13 4C13.5 3.5 14.5 3.5 15 4L20 9C20.5 9.5 20.5 10.5 20 11L11 20">
+                </path>
+                <line x1="10" y1="9" x2="15" y2="14"></line>
+            </svg>
+        </button>
+        <button class="tool-btn" id="lineTool" onclick="setDrawMode('line')" title="Лінія">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M21.56 10.96l-7.52-7.52a2 2 0 0 0-2.83 0L3.04 11.6a2 2 0 0 0 0 2.83l7.52 7.52a2 2 0 0 0 2.83 0l8.17-8.17a2 2 0 0 0 0-2.82z">
+                </path>
+                <path d="M13.5 6.5l4 4"></path>
+                <path d="M10.5 9.5l4 4"></path>
+                <path d="M7.5 12.5l4 4"></path>
+            </svg>
+        </button>
+        <button class="tool-btn" id="shapeTool" onclick="toggleShapePicker()" title="Фігури">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <circle cx="17.5" cy="6.5" r="3.5"></circle>
+                <path d="M12 21l4-7H8l4 7z"></path>
+            </svg>
+        </button>
+        <button class="tool-btn" id="freetextTool" onclick="toggleFreetextMode()" title="Довільний текст">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                <line x1="9" y1="20" x2="15" y2="20"></line>
+                <line x1="12" y1="4" x2="12" y2="20"></line>
+            </svg>
+        </button>
+        <button class="tool-btn" id="imageTool" onclick="triggerImageUpload()" title="Додати зображення">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+        </button>
+        <button class="tool-btn" id="timerTool" onclick="addTimerToPage()" title="Таймер">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15.5 14" />
+                <path d="M9 2h6M12 2v2" stroke-linecap="round" />
+            </svg>
+        </button>
+        <button class="tool-btn" id="symPanelBtn" onclick="toggleSymPanel()" title="Спеціальні символи">
+            <span style="font-size: 18px; font-weight: bold; font-family: serif;">Ω</span>
+        </button>
+        <input type="file" id="imageFileInput" accept="image/*" style="display:none"
+            onchange="handleImageUpload(event)">
+
+        <div class="toolbar-divider" id="dividerBeforeAI"></div>
+
+        <button class="tool-btn" id="aiAssistantBtn" onclick="toggleAiPrompt()" title="AI помічник">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1v4a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-4H7a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z" />
+                <circle cx="9.5" cy="10" r="1" fill="currentColor" stroke="none" />
+                <circle cx="14.5" cy="10" r="1" fill="currentColor" stroke="none" />
+                <path d="M9.5 14.5c.5 1 1.5 1.5 2.5 1.5s2-.5 2.5-1.5" />
+            </svg>
+        </button>
+
+        <div class="toolbar-divider" id="dividerAfterAI"></div>
+
+        <button class="tool-btn" id="dictationBtn" onclick="toggleDictation()" title="Голосове введення">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+        </button>
+
+        <button class="tool-btn" id="clearBoardBtn" onclick="clearBoard()" title="Очистити">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Brush size slider popup (shows when pencil is active) -->
+    <div class="brush-slider-popup" id="brushSliderPopup">
+        <div class="brush-preview">
+            <div class="brush-preview-dot" id="brushPreviewDot" style="width:7px;height:7px"></div>
+        </div>
+        <input type="range" id="brushSizeSlider" min="1" max="30" value="3" oninput="onBrushSliderInput(this.value)"
+            onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">
+        <span class="brush-size-label" id="brushSizeLabel">3</span>
+    </div>
+
+    <!-- Eraser size slider popup (shows when eraser is active) -->
+    <div class="brush-slider-popup" id="eraserSliderPopup">
+        <div class="brush-preview">
+            <div class="brush-preview-dot" id="eraserPreviewDot"
+                style="width:28px;height:28px;background:#cbd5e1;border:2px solid #94a3b8;"></div>
+        </div>
+        <input type="range" id="eraserSizeSlider" min="10" max="70" value="30" oninput="onEraserSliderInput(this.value)"
+            onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">
+        <span class="brush-size-label" id="eraserSizeLabel">30</span>
+    </div>
+
+    <div class="page-switcher" id="pageSwitcher">
+        <button class="page-btn" id="ssCopyBtn" onclick="boardCopyImage(event)" title="Копіювати сторінку">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+        </button>
+        <button class="page-btn" id="ssDownloadBtn" onclick="boardDownloadImage(event)" title="Скачати сторінку">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </button>
+
+        <button class="page-btn" onclick="prevPage()" title="Попередня сторінка">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <span id="pageIndicator">1 / 1</span>
+        <button class="page-btn" onclick="nextPage()" title="Наступна сторінка">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <button class="page-btn" onclick="addPage()" title="Додати сторінку">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+        <button class="page-btn" id="deletePageBtn" onclick="deletePage()" title="Видалити сторінку"
+            style="color:#ef4444;">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+        </button>
+
+        <div style="width: 1px; height: 16px; background: #cbd5e1; margin: 0 1px; flex-shrink:0;"></div>
+
+
+        <button class="page-btn" onclick="toggleBoardMode()" title="Закрити режим редагування">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="none" fill="none">
+                <circle cx="12" cy="12" r="11" fill="#ef4444"></circle>
+                <path d="M8 8L16 16M16 8L8 16" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="shape-picker" id="shapePicker">
+        <button class="shape-opt" data-shape="rect" onclick="selectShape('rect')" title="Прямокутник">▭</button>
+        <button class="shape-opt" data-shape="round-rect" onclick="selectShape('round-rect')"
+            title="Заокруглений прямокутник">▢</button>
+        <button class="shape-opt" data-shape="circle" onclick="selectShape('circle')" title="Коло">○</button>
+        <button class="shape-opt" data-shape="ellipse" onclick="selectShape('ellipse')" title="Еліпс">⬭</button>
+        <button class="shape-opt" data-shape="triangle" onclick="selectShape('triangle')" title="Трикутник">△</button>
+        <button class="shape-opt" data-shape="right-triangle" onclick="selectShape('right-triangle')"
+            title="Прямокутний трикутник">◺</button>
+        <button class="shape-opt" data-shape="diamond" onclick="selectShape('diamond')" title="Ромб">◇</button>
+        <button class="shape-opt" data-shape="star" onclick="selectShape('star')" title="Зірка">☆</button>
+        <button class="shape-opt" data-shape="arrow-r" onclick="selectShape('arrow-r')"
+            title="Стрілка вправо">➜</button>
+        <button class="shape-opt" data-shape="double-arrow" onclick="selectShape('double-arrow')"
+            title="Двостороння стрілка">↔</button>
+        <button class="shape-opt" data-shape="heart" onclick="selectShape('heart')" title="Серце">♡</button>
+        <button class="shape-opt" data-shape="hexagon" onclick="selectShape('hexagon')" title="Шестикутник">⬡</button>
+    </div>
+
+    <div id="gridSymBar" class="grid-sym-bar"></div>
+    <div id="textSymBar" class="text-sym-bar"></div>
+    <div class="math-panel" id="mathPanel">
+        <div class="math-panel-title">Математика</div>
+        <div class="math-panel-subtitle" style="margin-top:2px">Шаблони</div>
+        <div class="math-panel-templates" id="mathTemplateGrid"></div>
+        <div class="math-panel-subtitle" id="mathFractionTitle">Дріб</div>
+        <div class="math-panel-fraction-row">
+            <input id="mathFracNum" type="text" placeholder="Чисельник">
+            <input id="mathFracDen" type="text" placeholder="Знаменник">
+            <button type="button" id="mathFracBtn" onclick="insertFractionFromInputs()">Дріб</button>
+        </div>
+        <div class="math-panel-input-row">
+            <input id="mathQuickInput" type="text" placeholder="Введіть формулу, напр. (a+b)^2">
+            <button type="button" onclick="insertMathQuickInput()">Вставити</button>
+        </div>
+    </div>
+
+    <div id="statusPanel">
+        <div id="wordCounter"></div>
+    </div>
+
+    <div id="toast">Скопійовано!</div>
+
+    <!-- CONFIRM MODAL -->
+    <div id="confirmModal">
+        <div id="confirmModalOverlay" onclick="confirmNo()"></div>
+        <div id="confirmModalBox">
+            <p id="confirmModalText">Видалити поточну сторінку?</p>
+            <p id="confirmModalSub"></p>
+            <div id="confirmModalBtns">
+                <button id="confirmNoBtn" onclick="confirmNo()">Скасувати</button>
+                <button id="confirmYesBtn" onclick="confirmYes()">Видалити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMBED MODAL -->
+    <div id="embedModal" class="custom-modal">
+        <div id="embedModalOverlay" onclick="closeEmbedModal()"></div>
+        <div id="embedModalBox">
+            <p id="embedModalTitle">
+                <span id="embedModalIconWrapper" style="display:flex;align-items:center;"></span>
+                <span id="embedModalTitleText">Вставити</span>
+            </p>
+            <textarea id="embedInput" placeholder="" rows="3"></textarea>
+            <div id="embedModalBtns">
+                <button id="embedCancelBtn" onclick="closeEmbedModal()">Скасувати</button>
+                <button id="embedOkBtn" onclick="confirmEmbedInput()">Вставити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FREETEXT MODAL -->
+    <div id="freetextModal">
+        <div id="freetextModalOverlay"></div>
+        <div id="freetextModalBox">
+            <p id="freetextModalTitle">✏️ Довільний текст</p>
+            <textarea id="freetextInput" placeholder="Введіть текст..." rows="3"></textarea>
+            <div id="freetextModalBtns">
+                <button id="freetextCancelBtn" onclick="closeFreetextModal()">Скасувати</button>
+                <button id="freetextOkBtn" onclick="confirmFreetextInput()">Вставити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR MODAL -->
+    <div id="qrModal">
+        <div id="qrModalOverlay" onclick="closeQrModal()"></div>
+        <div id="qrModalBox">
+            <p id="qrModalTitle">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#3b82f6" stroke-width="1.8">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="5" y="5" width="3" height="3" fill="#3b82f6" stroke="none" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="16" y="5" width="3" height="3" fill="#3b82f6" stroke="none" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="5" y="16" width="3" height="3" fill="#3b82f6" stroke="none" />
+                </svg>
+                Генератор QR-коду
+            </p>
+            <input id="qrInput" type="text" placeholder="Посилання або текст...">
+            <div id="qrPreviewWrap">
+                <div id="qrPlaceholder">Введіть текст — QR з'явиться тут</div>
+                <canvas id="qrPreviewCanvas" width="200" height="200"></canvas>
+            </div>
+            <div id="qrSizeRow">
+                <span style="font-size:12px;color:#64748b;font-weight:600">Розмір:</span>
+                <button class="qr-size-btn active" data-size="150" onclick="setQrSize(this)">S</button>
+                <button class="qr-size-btn" data-size="220" onclick="setQrSize(this)">M</button>
+                <button class="qr-size-btn" data-size="300" onclick="setQrSize(this)">L</button>
+            </div>
+            <div id="qrModalBtns">
+                <button id="qrCancelBtn" onclick="closeQrModal()">Скасувати</button>
+                <button id="qrInsertBtn" onclick="insertQrToNotebook()" disabled>Вставити в зошит</button>
+            </div>
+            <p id="qrPromoText">Для генерації та збереження професійних QR кодів використовуйте:<br><a
+                    href="https://codenamexxv.github.io/qr/" target="_blank">codenamexxv.github.io/qr</a></p>
+        </div>
+    </div>
+
+    <!-- TRANSLATE MODAL -->
+    <div id="translateModal">
+        <div id="translateModalOverlay" onclick="closeTranslateModal()"></div>
+        <div id="translateModalBox">
+            <p id="translateModalTitle">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#497bb8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 8l6 6"/>
+                    <path d="M4 14l6-6 2-3"/>
+                    <path d="M2 5h12"/>
+                    <path d="M7 2h1"/>
+                    <path d="M22 22l-5-10-5 10"/>
+                    <path d="M14 18h6"/>
+                </svg>
+                Переклад тексту
+            </p>
+            <div class="tr-lang-row">
+                <select class="tr-lang-select" id="trLangFrom">
+                    <option value="auto">Визначити мову</option>
+                    <option value="uk">Українська</option>
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                    <option value="fr">Français</option>
+                    <option value="pl">Polski</option>
+                    <option value="ru">Русский</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="cs">Čeština</option>
+                    <option value="sk">Slovenčina</option>
+                </select>
+                <button class="tr-swap-btn" onclick="trSwapLangs()" title="Поміняти мови">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                    </svg>
+                </button>
+                <select class="tr-lang-select" id="trLangTo">
+                    <option value="uk" selected>Українська</option>
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                    <option value="fr">Français</option>
+                    <option value="pl">Polski</option>
+                    <option value="ru">Русский</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="cs">Čeština</option>
+                    <option value="sk">Slovenčina</option>
+                </select>
+            </div>
+            <div class="tr-source-container">
+                <textarea class="tr-text-area" id="trSource" placeholder="Введіть текст для перекладу..." rows="3"></textarea>
+                <button class="tr-mic-btn" id="trMicBtn" onclick="toggleTrDictation()" title="Голосове введення">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="tr-arrow">↓</div>
+            <textarea class="tr-text-area" id="trResult" placeholder="Переклад з'явиться тут..." rows="3" readonly></textarea>
+            <div id="trStatus"></div>
+            <div id="translateModalBtns">
+                <button id="trCancelBtn" onclick="closeTranslateModal()">Закрити</button>
+                <button id="trTranslateBtn" onclick="doTranslate()">Перекласти</button>
+                <button id="trInsertBtn" onclick="trInsertResult()" disabled>Вставити в зошит</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSLITERATION MODAL -->
+    <div id="translitModal">
+        <div id="translitModalOverlay" onclick="closeTranslitModal()"></div>
+        <div id="translitModalBox">
+            <p id="translitModalTitle">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#497bb8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 7V4h3"/><path d="M17 4h3v3"/><path d="M4 17v3h3"/><path d="M17 20h3v-3"/>
+                    <path d="M7 12h10"/><path d="M9 9l-2 3 2 3"/><path d="M15 9l2 3-2 3"/>
+                </svg>
+                Транслітерація
+            </p>
+            <label class="tl-label" id="tlSourceLabel" for="tlSource">Текст</label>
+            <textarea id="tlSource" rows="2" spellcheck="false"></textarea>
+            <div class="tl-lang-toggle">
+                <button type="button" class="tl-lang-btn active" id="tlLangEn" onclick="setTranslitLang('en')">🇬🇧 Англійська</button>
+                <button type="button" class="tl-lang-btn" id="tlLangDe" onclick="setTranslitLang('de')">🇩🇪 Німецька</button>
+            </div>
+            <label class="tl-label" id="tlResultLabel">Результат</label>
+            <div id="tlResult"></div>
+            <div id="translitModalBtns">
+                <button id="tlCancelBtn" onclick="closeTranslitModal()">Закрити</button>
+                <button id="tlInsertBtn" onclick="translitInsertResult()">Вставити в зошит</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HELP BUTTON -->
+    <button id="helpBtn" onclick="toggleHelpModal()" title="Довідка">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+    </button>
+
+    <!-- HELP MODAL -->
+    <div id="helpModal">
+        <div id="helpModalOverlay" onclick="toggleHelpModal()"></div>
+        <div id="helpModalBox">
+            <button id="helpCloseBtn" onclick="toggleHelpModal()">✕</button>
+
+            <div class="help-title">
+                <svg viewBox="0 0 24 24" width="26" height="26" stroke="#3b82f6" stroke-width="2" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Можливості редагування
+            </div>
+            <div class="help-subtitle">Суперзошит — повний довідник по всіх функціях</div>
+
+            <!-- ТЕКСТ -->
+            <div class="help-section">
+                <div class="help-section-title">✏️ Текст та форматування</div>
+                <div class="help-row">
+                    <div class="help-icon"><b>B</b></div>
+                    <div class="help-info">
+                        <div class="help-label">Жирний текст</div>
+                        <div class="help-desc">Виділіть текст і натисніть <span class="help-kbd">B</span> або <span
+                                class="help-kbd">Ctrl+B</span></div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon"><u>U</u></div>
+                    <div class="help-info">
+                        <div class="help-label">Підкреслений текст</div>
+                        <div class="help-desc">Виділіть текст і натисніть <span class="help-kbd">U</span> або <span
+                                class="help-kbd">Ctrl+U</span></div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon" style="font-size:12px">≡</div>
+                    <div class="help-info">
+                        <div class="help-label">Вирівнювання</div>
+                        <div class="help-desc">Ліво, центр, право — кнопки вирівнювання на панелі інструментів</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">🎨</div>
+                    <div class="help-info">
+                        <div class="help-label">Колір тексту</div>
+                        <div class="help-desc">Виберіть колір (синій, чорний, червоний, зелений) на панелі — він
+                            застосується до нового тексту та малюнка</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- МАЛЮВАННЯ -->
+            <div class="help-section">
+                <div class="help-section-title">🖊️ Малювання</div>
+                <div class="help-row">
+                    <div class="help-icon">✏️</div>
+                    <div class="help-info">
+                        <div class="help-label">Олівець</div>
+                        <div class="help-desc">Вільне малювання рукою. Натисніть кнопку олівця, щоб активувати. Довге
+                            натискання — змінити розмір пензля</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">⬜</div>
+                    <div class="help-info">
+                        <div class="help-label">Стирачка</div>
+                        <div class="help-desc">Стирає намальоване. Довге натискання — змінити розмір стирачки</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">📐</div>
+                    <div class="help-info">
+                        <div class="help-label">Лінія</div>
+                        <div class="help-desc">Малює рівну лінію від точки до точки</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">▭</div>
+                    <div class="help-info">
+                        <div class="help-label">Фігури</div>
+                        <div class="help-desc">12 фігур: прямокутники, кола, трикутники, зірка, серце, стрілки та інші.
+                            Фігури можна переміщувати і змінювати розмір</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЕЛЕМЕНТИ -->
+            <div class="help-section">
+                <div class="help-section-title">📌 Елементи на сторінці</div>
+                <div class="help-row">
+                    <div class="help-icon">💛</div>
+                    <div class="help-info">
+                        <div class="help-label">Стікери</div>
+                        <div class="help-desc">Жовті нотатки, які можна переміщувати по аркушу. Натисніть кнопку
+                            стікера, потім клікніть у будь-яке місце. Текст можна редагувати</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">🖼️</div>
+                    <div class="help-info">
+                        <div class="help-label">Зображення</div>
+                        <div class="help-desc">Вставляйте фото з файлів або через <span class="help-kbd">Ctrl+V</span>.
+                            Зображення можна переміщувати, змінювати розмір та видаляти</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">🔍</div>
+                    <div class="help-info">
+                        <div class="help-label">OCR — розпізнавання тексту</div>
+                        <div class="help-desc">На вставленому зображенні натисніть синю кнопку <span
+                                class="help-kbd">T</span> — текст буде розпізнаний і вставлений</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- НАВІГАЦІЯ -->
+            <div class="help-section">
+                <div class="help-section-title">📄 Сторінки та навігація</div>
+                <div class="help-row">
+                    <div class="help-icon">＋</div>
+                    <div class="help-info">
+                        <div class="help-label">Нові сторінки</div>
+                        <div class="help-desc">Натисніть <span class="help-kbd">+</span> у правому верхньому куті, щоб
+                            додати нову сторінку. Перемикайтесь стрілками</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">↩</div>
+                    <div class="help-info">
+                        <div class="help-label">Скасувати / Повторити</div>
+                        <div class="help-desc"><span class="help-kbd">Ctrl+Z</span> — скасувати, <span
+                                class="help-kbd">Ctrl+Shift+Z</span> — повторити. Або кнопки ↩ ↪ на панелі</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ГОЛОС І МОВА -->
+            <div class="help-section">
+                <div class="help-section-title">🎙️ Голос та мова</div>
+                <div class="help-row">
+                    <div class="help-icon">🎤</div>
+                    <div class="help-info">
+                        <div class="help-label">Голосове введення</div>
+                        <div class="help-desc">Натисніть кнопку мікрофона — диктуйте текст голосом. Індикатор знизу
+                            показує активну розкладку клавіатури (УКР / ENG)</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">🔢</div>
+                    <div class="help-info">
+                        <div class="help-label">Математичні підказки</div>
+                        <div class="help-desc">Напишіть вираз на кшталт <span class="help-kbd">2+2=</span> і натисніть
+                            пробіл — з'явиться підказка з результатом. <span class="help-kbd">Enter</span> — вставити
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- НАЛАШТУВАННЯ -->
+            <div class="help-section">
+                <div class="help-section-title">⚙️ Налаштування зошита</div>
+                <div class="help-row">
+                    <div class="help-icon">📅</div>
+                    <div class="help-info">
+                        <div class="help-label">Дата</div>
+                        <div class="help-desc">Виберіть дату через піктограму — заголовок зошита оновиться автоматично
+                            (UA або EN формат)</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">📝</div>
+                    <div class="help-info">
+                        <div class="help-label">Тип роботи</div>
+                        <div class="help-desc">«Домашня» або «Класна» — відображається у заголовку</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">🖊</div>
+                    <div class="help-info">
+                        <div class="help-label">Шрифт</div>
+                        <div class="help-desc">«Друк» — Georgia курсив; «Пропис» — рукописний шрифт Propysy</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">📓</div>
+                    <div class="help-info">
+                        <div class="help-label">Фон аркуша</div>
+                        <div class="help-desc">Лінійка, клітинка або чистий аркуш — обирайте відповідно до завдання
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЗБЕРЕЖЕННЯ -->
+            <div class="help-section">
+                <div class="help-section-title">💾 Збереження</div>
+                <div class="help-row">
+                    <div class="help-icon">☁️</div>
+                    <div class="help-info">
+                        <div class="help-label">Автозбереження</div>
+                        <div class="help-desc">Усі дані автоматично зберігаються в браузері (localStorage) — відкривайте
+                            сторінку наступного разу і продовжуйте</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">📸</div>
+                    <div class="help-info">
+                        <div class="help-label">Зберегти як зображення</div>
+                        <div class="help-desc">«Копіювати зображення» — копіює у буфер обміну. «Зберегти зображення» —
+                            завантажує PNG (на мобільних)</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">💾</div>
+                    <div class="help-info">
+                        <div class="help-label">Файл зошита (.notebook)</div>
+                        <div class="help-desc">Збережіть увесь зошит у файл кнопкою 💾 зліва на аркуші. Відновіть з
+                            файлу кнопкою 📁 — усі сторінки, малюнки та елементи повернуться</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ДОДАТКОВЕ ФОРМАТУВАННЯ -->
+            <div class="help-section">
+                <div class="help-section-title">✏️ Додаткове форматування</div>
+                <div class="help-row">
+                    <div class="help-icon"><s>S</s></div>
+                    <div class="help-info">
+                        <div class="help-label">Закреслений текст</div>
+                        <div class="help-desc">Виділіть текст і натисніть кнопку S із закресленням на панелі
+                            інструментів</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon" style="font-size:12px;font-weight:700">x²</div>
+                    <div class="help-info">
+                        <div class="help-label">Надрядковий (степінь)</div>
+                        <div class="help-desc">Виділіть текст і натисніть x² на панелі — зручно для запису ступенів і
+                            показників</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon" style="font-size:12px;font-weight:700">x₂</div>
+                    <div class="help-info">
+                        <div class="help-label">Підрядковий (індекс)</div>
+                        <div class="help-desc">Виділіть текст і натисніть x₂ на панелі — для хімічних формул та індексів
+                        </div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">Ω</div>
+                    <div class="help-info">
+                        <div class="help-label">Панель спецсимволів</div>
+                        <div class="help-desc">Натисніть кнопку Ω на панелі — з'явиться набір математичних і наукових
+                            символів (√, π, ∞, ≤, °...). В режимі клітинки — математичні; у звичайному — загальні</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- КЕРУВАННЯ СТОРІНКАМИ -->
+            <div class="help-section">
+                <div class="help-section-title">📄 Керування сторінками</div>
+                <div class="help-row">
+                    <div class="help-icon">⧉</div>
+                    <div class="help-info">
+                        <div class="help-label">Копіювати сторінку</div>
+                        <div class="help-desc">Кнопка «Копіювати сторінку» на панелі редагування — дублює поточну
+                            сторінку з усім вмістом на нову</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">⬇</div>
+                    <div class="help-info">
+                        <div class="help-label">Скачати сторінку</div>
+                        <div class="help-desc">Кнопка «Скачати сторінку» — зберігає поточний аркуш як PNG-зображення на
+                            пристрій</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon" style="color:#ef4444">🗑</div>
+                    <div class="help-info">
+                        <div class="help-label">Видалити сторінку</div>
+                        <div class="help-desc">Кнопка видалення (червона) — видаляє поточну сторінку після
+                            підтвердження. Дію не можна скасувати</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- РОЗШИРЕНІ ЕЛЕМЕНТИ -->
+            <div class="help-section">
+                <div class="help-section-title">🧩 Розширені елементи</div>
+                <div class="help-row">
+                    <div class="help-icon">T</div>
+                    <div class="help-info">
+                        <div class="help-label">Довільний текст</div>
+                        <div class="help-desc">Кнопка T на панелі — додає плаваючий текстовий блок. Можна переміщувати,
+                            змінювати розмір і обертати. Для видалення — ×</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">▦</div>
+                    <div class="help-info">
+                        <div class="help-label">QR-код</div>
+                        <div class="help-desc">Кнопка QR на панелі — відкриває генератор. Введіть посилання або текст,
+                            оберіть розмір — QR-код вставиться на аркуш як зображення</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">⏱</div>
+                    <div class="help-info">
+                        <div class="help-label">Таймер</div>
+                        <div class="help-desc">Кнопка таймера на панелі — додає перетягуваний зворотній відлік.
+                            Натисніть на цифри, щоб змінити час. Є пресети: 1, 5, 10, 15 хвилин. Сигнал сповіщає про
+                            завершення</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЗОБРАЖЕННЯ: ДОДАТКОВІ ДІЇ -->
+            <div class="help-section">
+                <div class="help-section-title">🖼️ Зображення: додаткові дії</div>
+                <div class="help-row">
+                    <div class="help-icon">✂️</div>
+                    <div class="help-info">
+                        <div class="help-label">Обрізка зображення</div>
+                        <div class="help-desc">Натисніть на вставлене зображення — з'явиться кнопка ✂️. Виділіть область
+                            для обрізки і натисніть «Застосувати»</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- AI Section -->
+            <div class="help-section">
+                <div class="help-section-title">🤖 Штучний інтелект (AI)</div>
+                <div class="help-row">
+                    <div class="help-icon">✨</div>
+                    <div class="help-info">
+                        <div class="help-label">AI помічник</div>
+                        <div class="help-desc">Натисніть кнопку із зірочкою на панелі — відкриється віконце. Напишіть або продиктуйте запит (наприклад, "Склади 5 речень англійською"), і AI згенерує текст прямо в зошит</div>
+                    </div>
+                </div>
+                <div class="help-row">
+                    <div class="help-icon">✓</div>
+                    <div class="help-info">
+                        <div class="help-label">Перевірка граматики</div>
+                        <div class="help-desc">Виділіть будь-який текст у зошиті та натисніть кнопку (верхнє меню при виділенні) — AI автоматично виправить орфографічні та пунктуаційні помилки, показавши, що саме змінилося</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collab Section -->
+            <div class="help-section">
+                <div class="help-section-title">🌐 Спільний доступ</div>
+                <div class="help-row">
+                    <div class="help-icon">👥</div>
+                    <div class="help-info">
+                        <div class="help-label">Онлайн-редагування</div>
+                        <div class="help-desc">Натисніть кнопку 👥 на панелі зліва. Вчитель створює сесію і отримує код. Учні вводять цей код на своїх пристроях і приєднуються до зошита. Зміни синхронізуються в реальному часі</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="mathHint"><span class="math-hint-result" id="mathHintVal"></span><span class="math-hint-key">Enter</span>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         GROQ REQUEST QUEUE  +  RATE LIMITER  +  MODEL FALLBACK
+         ══════════════════════════════════════════════════════════════
+
+         Усі виклики Groq API проходять через GroqQueue.enqueue().
+
+         ── Черга та ліміт ──
+           MAX_CONCURRENT  — максимум одночасних запитів (1 для free-tier)
+           MIN_INTERVAL_MS — мінімальна пауза між стартами (мс)
+           MAX_RETRIES     — авто-повтори при 429 / мережевій помилці
+           RETRY_DELAY_MS  — затримка перед повтором (мс)
+
+         ── Fallback-ланцюжки моделей ──
+           tier "text"   (складні запити):
+               primary  → llama-3.3-70b-versatile
+               fallback → qwen-qwq-32b            (якщо TPM primary вичерпано)
+               last     → llama-3.1-8b-instant    (якщо і fallback вичерпано)
+
+           tier "vision" (OCR):
+               primary  → meta-llama/llama-4-scout-17b-16e-instruct
+               fallback → meta-llama/llama-4-maverick-17b-128e-instruct
+               last     → llama-3.2-11b-vision-preview
+
+         ── Як визначається вичерпаність TPM ──
+           • Groq повертає заголовки:
+               x-ratelimit-remaining-tokens  — залишок TPM
+               x-ratelimit-reset-tokens      — коли скинеться (напр. "2s", "500ms")
+           • Якщо remaining-tokens < TPM_LOW_THRESHOLD або прийшов 429 —
+             поточна модель позначається "exhausted" до часу reset.
+           • Наступний запит того самого tier автоматично отримує наступну
+             модель у ланцюжку.
+    ══════════════════════════════════════════════════════════════ -->
+
+
+    <!-- СПІЛЬНЕ РЕДАГУВАННЯ -->
+    <!-- Notebook-style confirm dialog -->
+    <div id="nbConfirmOverlay">
+        <div id="nbConfirmBox">
+            <div class="nbc-icon">🛑</div>
+            <div class="nbc-title" id="nbcTitle">Припинити доступ?</div>
+            <div class="nbc-msg" id="nbcMsg">Усі учні будуть від'єднані від зошита.</div>
+            <div class="nbc-btns">
+                <button class="nbc-btn nbc-cancel" id="nbcCancel">Скасувати</button>
+                <button class="nbc-btn nbc-confirm" id="nbcOk">Припинити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session-end notification (notebook style) -->
+    <div id="sessionEndToast">
+        <div class="set-inner">
+            <div class="set-icon">📓</div>
+            <div class="set-title" id="setTitle">Сесію завершено</div>
+            <div class="set-msg" id="setMsg">Вчитель закрив спільний доступ до зошита.</div>
+            <button class="set-btn"
+                onclick="document.getElementById('sessionEndToast').classList.remove('show')">Зрозуміло</button>
+        </div>
+    </div>
+
+    <div id="studentRemovedToast">
+        <div class="srt-inner">
+            <div class="srt-icon">🚫</div>
+            <div class="srt-title" id="srtTitle">Вас від'єднав вчитель</div>
+            <div class="srt-msg" id="srtMsg">Вчитель вилучив вас із цього зошита.</div>
+            <button class="srt-btn"
+                onclick="document.getElementById('studentRemovedToast').classList.remove('show')">Зрозуміло</button>
+        </div>
+    </div>
+
+    <div id="cBanner">🔗 Ви підключені до зошита вчителя — зміни синхронізуються</div>
+    <button id="allowEditBtn" title="Дозволити учням редагувати виділений текст">✏️ Дозволити редагувати</button>
+    <div id="editAuthorTag"><span id="editAuthorDot"></span><span id="editAuthorName">—</span></div>
+
+    <button id="cFloatBtn" onclick="cOpenModal()">
+        <span class="cfdot" id="cFloatDot"></span>
+        <span id="cFloatLbl">Доступ</span>
+    </button>
+
+    <div id="collabOverlay">
+        <div id="collabBox">
+            <div class="ctitle">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#3b82f6" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Спільне редагування
+            </div>
+            <div class="ctabs">
+                <button class="ctab on" id="cTabT" onclick="cTab('t')">👩‍🏫 Вчитель</button>
+                <button class="ctab" id="cTabS" onclick="cTab('s')">🎓 Учень</button>
+            </div>
+
+            <!-- Вчитель -->
+            <div class="cpanel on" id="cPanelT">
+                <div>
+                    <div class="clabel">Код для учнів (натисніть щоб скопіювати):</div>
+                    <div class="ccode" id="cCodeEl" onclick="cCopyCode()">------</div>
+                    <div class="chint">або відскануйте QR-код нижче</div>
+                </div>
+                <div id="cQrWrap">
+                    <div id="cQrInner" style="border-radius:8px;overflow:hidden;"></div>
+                    <div id="cJoinUrl" onclick="cCopyUrl()" title="Клікніть, щоб скопіювати посилання">— посилання
+                        з'явиться тут —</div>
+                </div>
+                <div class="cstatus"><span class="cdot wait" id="cTDot"></span><span id="cTStatus">...</span></div>
+                <div class="cpeers" id="cPeers">...</div>
+                <button class="cbtn cbtn-red" onclick="cStopSession()">🛑 Припинити доступ</button>
+                <button class="cbtn cbtn-gray" onclick="cCloseModal()">Закрити</button>
+            </div>
+
+            <!-- Учень -->
+            <div class="cpanel" id="cPanelS">
+                <div>
+                    <div class="clabel">Ім'я та прізвище:</div><input class="cname" id="cName"
+                        placeholder="Наприклад: Даня Варенченко" maxlength="60" autocomplete="name" required>
+                </div>
+                <div>
+                    <div class="clabel">Код від вчителя:</div><input class="cinput" id="cCodeIn" placeholder="XXXXXX"
+                        maxlength="6" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')"
+                        autocomplete="off">
+                </div>
+                <div class="cstatus" id="cSSBar" style="display:none"><span class="cdot wait" id="cSDot"></span><span
+                        id="cSStatus">Підключення...</span></div>
+                <button class="cbtn cbtn-blue" id="cJoinBtn" onclick="cJoin()">Приєднатися</button>
+                <button class="cbtn cbtn-gray" onclick="cCloseModal()">Закрити</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- ── Context Menu ── -->
+    <div id="editorContextMenu" role="menu">
+        <button class="ctx-item" id="ctxCopy" onclick="ctxAction('copy')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Копіювати
+        </button>
+        <button class="ctx-item" id="ctxCut" onclick="ctxAction('cut')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="6" cy="20" r="3"/><circle cx="6" cy="4" r="3"/><line x1="6" y1="7" x2="6" y2="17"/><line x1="6" y1="7" x2="21" y2="22"/><line x1="6" y1="17" x2="21" y2="2"/>
+            </svg>
+            Вирізати
+        </button>
+        <button class="ctx-item" id="ctxPaste" onclick="ctxAction('paste')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            </svg>
+            Вставити
+        </button>
+        <button class="ctx-item" id="ctxEmbed" onclick="ctxAction('embed')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            Розумна вставка
+        </button>
+        <div class="ctx-sep"></div>
+        <button class="ctx-item ctx-list" id="ctxList" onclick="ctxAction('list')">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <text x="2" y="8" font-size="7" fill="currentColor" stroke="none" font-family="Arial">1.</text>
+                <line x1="9" y1="7" x2="21" y2="7"/>
+                <text x="2" y="13" font-size="7" fill="currentColor" stroke="none" font-family="Arial">2.</text>
+                <line x1="9" y1="12" x2="21" y2="12"/>
+                <text x="2" y="18" font-size="7" fill="currentColor" stroke="none" font-family="Arial">3.</text>
+                <line x1="9" y1="17" x2="21" y2="17"/>
+            </svg>
+            Нумерований список
+        </button>
+        <button class="ctx-item ctx-sticker" id="ctxSticker" onclick="ctxAction('sticker')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3z"/>
+                <polyline points="15 3 15 9 21 9"/>
+            </svg>
+            Вставити стікер
+        </button>
+        <button class="ctx-item ctx-table" id="ctxTable" onclick="ctxAction('table')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="3" y1="15" x2="21" y2="15"/>
+                <line x1="9" y1="9" x2="9" y2="21"/>
+                <line x1="15" y1="9" x2="15" y2="21"/>
+            </svg>
+            Вставити таблицю
+        </button>
+        <div class="ctx-sep"></div>
+        <button class="ctx-item ctx-quiz" id="ctxQuiz" onclick="ctxAction('quiz')">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17" stroke-width="3" stroke-linecap="round"/></svg>
+            Згенерувати тест
+        </button>
+        <div class="ctx-sep" id="ctxTranslitSep"></div>
+        <button class="ctx-item ctx-qr" id="ctxQr" onclick="ctxAction('qr')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/>
+                <line x1="14" y1="14" x2="14" y2="14.01"/><line x1="18" y1="14" x2="18" y2="14.01"/><line x1="21" y1="14" x2="21" y2="14.01"/>
+                <line x1="14" y1="18" x2="14" y2="21"/><line x1="18" y1="18" x2="21" y2="18"/><line x1="21" y1="21" x2="21" y2="21"/>
+            </svg>
+            Генерувати QR
+        </button>
+        <button class="ctx-item ctx-translate" id="ctxTranslate" onclick="ctxAction('translate')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 8l6 6"/>
+                <path d="M4 14l6-6 2-3"/>
+                <path d="M2 5h12"/>
+                <path d="M7 2h1"/>
+                <path d="M22 22l-5-10-5 10"/>
+                <path d="M14 18h6"/>
+            </svg>
+            Перекласти
+        </button>
+        <button class="ctx-item ctx-translit" id="ctxTranslit" onclick="ctxAction('translit')">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7V4h3"/><path d="M17 4h3v3"/><path d="M4 17v3h3"/><path d="M17 20h3v-3"/>
+                <path d="M7 12h10"/><path d="M9 9l-2 3 2 3"/><path d="M15 9l2 3-2 3"/>
+            </svg>
+            Транслітерація
+        </button>
+    </div>
+
+
+
+    <!-- ── Link Popup ── -->
+    <div id="ctxLinkPopup">
+        <div class="clp-label">Адреса посилання</div>
+        <input type="text" id="ctxLinkInput" class="clp-input" placeholder="https://..." autocomplete="off" spellcheck="false"/>
+        <div class="clp-btns">
+            <button class="clp-cancel" onclick="closeCtxLinkPopup()">Скасувати</button>
+            <button class="clp-insert" onclick="confirmCtxLink()">Вставити</button>
+        </div>
+    </div>
+
+    <!-- ── Table Picker Popup ── -->
+    <div id="ctxTablePicker">
+        <div class="tpk-title">Оберіть розмір таблиці</div>
+        <div class="tpk-grid" id="tpkGrid"></div>
+        <div class="tpk-label" id="tpkLabel">—</div>
+        <div class="tpk-manual">
+            <input type="number" id="tpkRows" min="1" max="20" value="3" title="Рядки">
+            <span>×</span>
+            <input type="number" id="tpkCols" min="1" max="20" value="3" title="Стовпці">
+            <button class="tpk-insert-btn" onclick="insertTableManual()">Вставити</button>
+        </div>
+    </div>
+
+
+
+    <!-- ── Mini floating format bar ── -->
+    <div id="miniFormatBar" role="toolbar" aria-label="Швидке форматування">
+        <button class="mfb-btn" id="mfbBold"      title="Жирний"        onmousedown="event.preventDefault(); formatText('bold')"><b style="font-size:13px">B</b></button>
+        <button class="mfb-btn" id="mfbUnderline" title="Підкреслений"   onmousedown="event.preventDefault(); formatText('underline')"><u style="font-size:13px">U</u></button>
+        <button class="mfb-btn" id="mfbStrike"    title="Зачеркнутий"   onmousedown="event.preventDefault(); formatText('strikethrough')"><s style="font-size:13px">S</s></button>
+        <button class="mfb-btn" id="mfbSup"       title="Надрядковий"   onmousedown="event.preventDefault(); formatText('superscript')"><span style="font-size:11px;font-weight:700;line-height:1">x<sup style="font-size:7px">²</sup></span></button>
+        <button class="mfb-btn" id="mfbSub"       title="Підрядковий"   onmousedown="event.preventDefault(); formatText('subscript')"><span style="font-size:11px;font-weight:700;line-height:1">x<sub style="font-size:7px">₂</sub></span></button>
+        <div class="mfb-sep"></div>
+        <button class="mfb-btn" id="mfbLeft"   title="По лівому краю"  onmousedown="event.preventDefault(); formatText('justifyLeft')">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <button class="mfb-btn" id="mfbCenter" title="По центру"       onmousedown="event.preventDefault(); formatText('justifyCenter')">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <button class="mfb-btn" id="mfbRight"  title="По правому краю" onmousedown="event.preventDefault(); formatText('justifyRight')">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="mfb-sep"></div>
+        <button class="mfb-btn" id="mfbNumberedList" title="Нумерований список" onmousedown="event.preventDefault(); mfbOpenListNumbered()">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><text x="2" y="8" font-size="7" fill="currentColor" stroke="none" font-family="Arial">1.</text><line x1="9" y1="7" x2="21" y2="7"/><text x="2" y="13" font-size="7" fill="currentColor" stroke="none" font-family="Arial">2.</text><line x1="9" y1="12" x2="21" y2="12"/><text x="2" y="18" font-size="7" fill="currentColor" stroke="none" font-family="Arial">3.</text><line x1="9" y1="17" x2="21" y2="17"/></svg>
+        </button>
+        <button class="mfb-btn" id="mfbLink" title="Вставити посилання" onmousedown="event.preventDefault(); mfbOpenLink()">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </button>
+        <div class="mfb-sep"></div>
+        <button class="mfb-btn" id="mfbSpell" title="Перевірити орфографію" onmousedown="event.preventDefault(); mfbOpenSpellCheck()">
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/><polyline points="15 6 18 9" stroke-dasharray="1 1"/></svg>
+        </button>
+    </div>
+
+
+
+    <!-- ── AI QUIZ MAKER MODAL ── -->
+    <div id="quizMakerOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.55);backdrop-filter:blur(6px);z-index:10800;align-items:center;justify-content:center;padding:16px;">
+        <div id="quizMakerBox" style="background:#fff;border-radius:20px;width:620px;max-width:97vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 28px 70px rgba(0,0,0,0.24);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;">
+            <!-- Header -->
+            <div style="padding:20px 22px 14px;border-bottom:1.5px solid #f1f5f9;flex-shrink:0;display:flex;align-items:center;gap:12px;">
+                <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17" stroke-width="3" stroke-linecap="round"/></svg>
+                </div>
+                <div style="flex:1;">
+                    <div style="font-weight:700;font-size:16px;color:#0f172a;">AI Quiz Maker</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:1px;" id="quizSubtitle">Генерую 7 запитань із виділеного тексту…</div>
+                </div>
+                <button onclick="closeQuizMaker()" style="width:32px;height:32px;border:none;background:#f1f5f9;border-radius:9px;cursor:pointer;color:#64748b;font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;" title="Закрити">✕</button>
+            </div>
+            <!-- Loading spinner -->
+            <div id="quizLoadingArea" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:52px 24px;">
+                <div id="quizSpinner" style="width:42px;height:42px;border:4px solid #fde68a;border-top-color:#f59e0b;border-radius:50%;animation:quizSpin 0.8s linear infinite;"></div>
+                <div style="font-size:14px;color:#78716c;font-weight:500;">Аналізую текст і складаю тест…</div>
+            </div>
+            <!-- Questions area -->
+            <div id="quizQuestionsArea" style="display:none;flex:1;overflow-y:auto;padding:16px 20px 8px;"></div>
+            <!-- Footer -->
+            <div id="quizFooter" style="display:none;padding:14px 20px 18px;border-top:1.5px solid #f1f5f9;flex-shrink:0;display:flex;gap:10px;align-items:center;">
+                <div id="quizScore" style="font-size:13px;font-weight:600;color:#64748b;flex:1;"></div>
+                <button onclick="quizInsertIntoNotebook()" id="quizInsertBtn" style="padding:9px 18px;border:none;border-radius:10px;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Вставити в зошит
+                </button>
+                <button onclick="quizRegenerate()" style="padding:9px 16px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fff;color:#475569;font-size:13px;font-weight:600;cursor:pointer;">Згенерувати нові</button>
+                <button onclick="closeQuizMaker()" style="padding:9px 16px;border:1.5px solid #e2e8f0;border-radius:10px;background:#fff;color:#64748b;font-size:13px;font-weight:600;cursor:pointer;">Закрити</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- AI ASSISTANT POPUP -->
+    <div class="ai-prompt-popup" id="aiPromptPopup">
+        <div class="ai-prompt-header">
+            <div class="ai-prompt-icon">
+                <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1v4a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-4H7a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z" />
+                    <circle cx="9.5" cy="10" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="14.5" cy="10" r="1" fill="currentColor" stroke="none" />
+                    <path d="M9.5 14.5c.5 1 1.5 1.5 2.5 1.5s2-.5 2.5-1.5" />
+                </svg>
+            </div>
+            <div>
+                <div class="ai-prompt-title">AI помічник</div>
+                <div class="ai-prompt-subtitle">Опишіть що згенерувати та вставити в зошит</div>
+            </div>
+            <button class="ai-prompt-gear" onclick="openGroqKeyModal()" title="Налаштування API ключа">
+                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+            <button class="ai-prompt-close" onclick="closeAiPrompt()" title="Закрити">✕</button>
+        </div>
+        <div class="ai-prompt-body">
+            <textarea class="ai-prompt-textarea" id="aiPromptInput" placeholder="Напр.: Напиши вірш про весну, Склади 5 речень англійською, Поясни теорему Піфагора..."></textarea>
+            <div class="ai-prompt-actions">
+                <span class="ai-prompt-hint">Enter — надіслати &nbsp;·&nbsp; Shift+Enter — новий рядок</span>
+                <button class="ai-prompt-mic" id="aiPromptMicBtn" onclick="toggleAiDictation()" title="Голосове введення">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+                <button class="ai-prompt-send" id="aiPromptSendBtn" onclick="sendAiPrompt()">
+                    <span class="ai-spinner"></span>
+                    <svg class="ai-send-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Надіслати
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GROQ API KEY MODAL -->
+    <div id="groqKeyModal" style="display:none">
+        <div class="gkm-box">
+            <div class="gkm-header">
+                <div class="gkm-header-icon">🔑</div>
+                <div class="gkm-title" id="gkmTitle">Власний API ключ Groq</div>
+                <div class="gkm-subtitle" id="gkmSubtitle">Використовуй безкоштовний API ключ з groq.com для всіх AI-функцій в Суперзошиті</div>
+                <button class="gkm-close" onclick="closeGroqKeyModal()" title="Закрити">✕</button>
+            </div>
+            <div class="gkm-body">
+                <div class="gkm-steps-title" id="gkmStepsTitle">ЯК ОТРИМАТИ КЛЮЧ — ПОКРОКОВА ІНСТРУКЦІЯ</div>
+                <div class="gkm-steps">
+                    <div class="gkm-step">
+                        <div class="gkm-step-num">1</div>
+                        <div class="gkm-step-text">Перейди на сайт <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a> та зареєструйся безкоштовно (через Google або email)</div>
+                    </div>
+                    <div class="gkm-step">
+                        <div class="gkm-step-num">2</div>
+                        <div class="gkm-step-text">У лівому меню натисни <strong>«API Keys»</strong></div>
+                    </div>
+                    <div class="gkm-step">
+                        <div class="gkm-step-num">3</div>
+                        <div class="gkm-step-text">Натисни кнопку <strong>«Create API Key»</strong>, введи будь-яку назву (наприклад <code>supernotebook</code>) та натисни <strong>Submit</strong></div>
+                    </div>
+                    <div class="gkm-step">
+                        <div class="gkm-step-num">4</div>
+                        <div class="gkm-step-text">Скопіюй ключ — він починається з <code>gsk_</code>. Увага: ключ показується лише один раз!</div>
+                    </div>
+                    <div class="gkm-step">
+                        <div class="gkm-step-num">5</div>
+                        <div class="gkm-step-text">Встав скопійований ключ у поле нижче та натисни <strong>«Зберегти»</strong></div>
+                    </div>
+                </div>
+
+                <div class="gkm-divider"></div>
+
+                <div class="gkm-key-label">
+                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                    <span id="gkmKeyLabel">Твій API ключ Groq</span>
+                </div>
+                <div class="gkm-key-wrap">
+                    <input class="gkm-key-input" id="gkmKeyInput" type="password" placeholder="gsk_xxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+                    <button class="gkm-save-btn" id="gkmSaveBtn" onclick="saveGroqKey()">Зберегти</button>
+                </div>
+                <div class="gkm-status" id="gkmStatus"></div>
+
+                <div class="gkm-note" id="gkmNote">
+                    💡 Ключ зберігається лише у твоєму браузері (localStorage) і нікуди не передається. Якщо ключ не введений — використовується вбудований демо-ключ із обмеженим лімітом.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- ══════════════════════════════════════════════════════
+         PWA: Manifest injection + Install Banner
+    ══════════════════════════════════════════════════════ -->
+
+    <!-- PWA Install Banner Removed -->
+
+    <!-- ══ Конфігурація (API ключі, Firebase) ══ -->
+    <script src="js/config.js"></script>
+
+    <!-- ══ Допоміжні бібліотеки / поліфіли ══ -->
+    <script src="js/qrcode-polyfill.js"></script>
+
+    <!-- ══ Ядро зошита (стан, дата, undo/redo, мовні словники) ══ -->
+    <script src="js/notebook-core.js"></script>
+
+    <!-- ══ AI: GroqQueue (черга запитів до Groq API, потрібна для OCR/AI-модулів) ══ -->
+    <script src="js/groq-queue.js"></script>
+
+    <!-- ══ Малювання, фігури, текст, стікери, зображення ══ -->
+    <script src="js/drawing.js"></script>
+
+    <!-- ══ Плаваючі вікна YouTube / HTML / iFrame ══ -->
+    <script src="js/media-windows.js"></script>
+
+    <!-- ══ OCR + Groq Vision + видалення фону ══ -->
+    <script src="js/ocr-ai.js"></script>
+
+    <!-- ══ QR-код та таймер ══ -->
+    <script src="js/qr-timer.js"></script>
+
+    <!-- ══ Редактор: контекстне меню, форматування, таблиці, переклад ══ -->
+    <script src="js/context-menu.js"></script>
+    <script src="js/format-bar.js"></script>
+    <script src="js/table-picker.js"></script>
+    <script src="js/editor-helpers.js"></script>
+    <script src="js/translate.js"></script>
+    <script src="js/transliteration.js"></script>
+
+    <!-- ══ AI: Groq-ключі, перевірка, помічник, тест-генератор ══ -->
+    <script src="js/groq-key-modal.js"></script>
+    <script src="js/spellcheck.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script src="js/ai-quiz-maker.js"></script>
+
+    <!-- ══ Спільне редагування (Firebase Collab) ══ -->
+    <script src="js/collab.js"></script>
+
+    <!-- ══ PWA встановлення ══ -->
+    <script src="js/pwa-install.js"></script>
+
+</body>
+</html>
